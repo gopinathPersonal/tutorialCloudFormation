@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  MyKeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Select Keypair from the list
+  MyEnvironment:
+    Type: String
+    Default: Development
+    AllowedValues:
+      - Development
+      - Production
+Mappings:
+  RegionMap:
+    us-east-1:
+      AMI: ami-0230bd60aa48260c6
+    us-east-2:
+      AMI: ami-06d4b7182ac3480fa
+  EnvironmentMap:
+    Development:
+      InstanceType: t2.micro
+    Production:
+      InstanceType: t2.small
+
+
+
+Resources:
+  MyEC2Instance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: !FindInMap
+        - RegionMap
+        - !Ref AWS::Region
+        - AMI
+      InstanceType: !FindInMap
+        - EnvironmentMap
+        - !Ref MyEnvironment
+        - InstanceType
+      KeyName: !Ref MyKeyName

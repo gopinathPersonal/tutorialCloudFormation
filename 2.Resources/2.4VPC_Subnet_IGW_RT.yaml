@@ -1,0 +1,81 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: CFT for creating VPC, Subnet, Internet Gateway, Route Tables, Security group and Ec2 Instances 
+Resources:
+  MyVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 20.0.0.0/16
+      EnableDnsHostnames: 'true'
+      EnableDnsSupport: 'true'
+      InstanceTenancy: 'default'
+      Tags: 
+        - Key: Name
+          Value: GopiVPC
+
+  PublicSubnet: 
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: 
+        Ref: MyVPC
+      CidrBlock: 20.0.0.0/24
+      AvailabilityZone: 'us-east-1a'
+      Tags: 
+        - Key: Name
+          Value: Pub-Subnet
+
+  MyInternetGateway: 
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags: 
+        - Key: Name
+          Value: igwy
+
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref MyInternetGateway
+      VpcId: 
+        Ref: MyVPC
+
+  MyRouteTable: 
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: 
+        Ref: MyVPC
+      Tags: 
+        - Key: Name
+          Value: RT
+
+  AddRoute:
+      Type: AWS::EC2::Route
+      Properties:
+        DestinationCidrBlock: 0.0.0.0/0
+        GatewayId: 
+          Ref: MyInternetGateway
+        RouteTableId: 
+          Ref: MyRouteTable
+ 
+  MySecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: My new security group
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '8080'
+          ToPort: '8080'
+          CidrIp: 0.0.0.0/0
+      VpcId: !Ref MyVPC
+
+  MyFirstInstance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: ami-0230bd60aa48260c6
+      InstanceType: t2.micro
+      KeyName: cfn-keypair-1
+      SubnetId: !Ref PublicSubnet
+      SecurityGroupIds: 
+        - !GetAtt MySecurityGroup.GroupId

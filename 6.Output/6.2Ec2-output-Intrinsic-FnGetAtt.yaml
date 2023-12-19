@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  MyFirstInstance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: ami-0230bd60aa48260c6
+      InstanceType: t2.micro
+      KeyName: cfn-keypair-1
+      SecurityGroups:
+        - default
+        - !Ref MySecurityGroup
+  MySecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: My new security group
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0
+
+Outputs:
+  MyInstanceId: 
+    Description: Instance ID of the Instance
+    Value: !Ref MyFirstInstance
+  MySecurityGroupId:
+    Description: SG ID
+    Value: !Ref MySecurityGroup
+    Export:
+      Name: SecurityGroupTest
+  MyDNSName:
+    Description: public DNS Name
+    Value: !GetAtt MyFirstInstance.PublicDnsName
+  MyAvailabilityZone:
+    Description: Availability Zone
+    Value: !GetAtt MyFirstInstance.AvailabilityZone
+    Export:
+      Name: !Sub "${AWS::StackName}-InstanceAz"

@@ -1,0 +1,69 @@
+# This is sample yaml file for better understanding
+
+#Key value pairs.
+Name: Gopi
+Age: 40
+Height: 168.2
+Occupation: Engineer
+Male: true
+AboutMe: "I'm Gopinath Let's meet"
+DOB: 1975-06-24T15:23:00
+Remarks: null
+
+# list using block sequence 
+Persons:
+  - Dave
+  - Raj
+  - Mary
+  - Linda
+# Flow sequence method of mentioning List
+Persons: [ABC, EDR, SSE, QQQ]
+
+# list containing dictionaries
+
+PersonDetails:
+  - Dave:
+      Age: 25
+      Sex: male
+  - Mary:
+      Age: 40
+      sex: female
+
+# list containing dictionaries containing list
+
+PersonDetails:
+  - Dave:
+      Age: 25
+      Sex: male
+      Education:
+        - Bachelors
+        - Masters
+  - Mary:
+      Age: 40
+      sex: female
+      Education: [Masters, Doctorate]
+
+# pipe in yaml (literal block) is to preserve sam  newline, indentation, tab spaces, spaces as is
+PersonDetails:
+  - Dave:
+      Age: 25
+      Sex: male
+      Address: 
+        121 XYZ Street
+        Amazon Road
+        Fremont CA 94538
+        123-234-2313
+  # > symbol in yaml (folded block); Renders text as single line. All new lines will be replaed with a single space.
+  # blank lines are converted to new line character
+PersonDetails:
+  - Dave:
+      Age: 25
+      Sex: male
+      Aboutme: >
+        121 XYZ Street bla baloa alj aodifulasdf oiwel lau wleirhlajeoilajsdfiwl laliehlasdf. 
+        Amazon Road alsdiw, aocnaicnawe om oi ani,di  weo
+        Fremont CA 94538, koul,m woeurl oi oi  weriweru93rlwej,, oaie9fewur
+
+
+
+

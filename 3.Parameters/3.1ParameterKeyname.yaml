@@ -1,0 +1,18 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  # MyKeyPair:
+  # Type: String
+    #AllowedValues:
+      #- cfn-keypair-1
+      #- cfn-keypair-2
+    #Description: Select the key pair from drop down list
+  MyKeyPair1:
+    Description: Select the key pair from drop down list
+    Type: AWS::EC2::KeyPair::KeyName
+Resources:
+  MyEC2Instance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: ami-0230bd60aa48260c6
+      InstanceType: t2.micro
+      KeyName: !Ref MyKeyPair1
